@@ -465,7 +465,7 @@ cuarentena <- function(poblacion, no_pruebas)
 
 avanzar_cuarentena <- function(poblacion) {
   # Iteramos sobre todos los individuos en busca de los que estan en cuarentena.
-  for (i in 1..dim(poblacion)[0]) {
+  for (i in 1:dim(poblacion)[0]) {
     # Si ha cumplido el limite de cuarentena, es sacado de cuarentena.
     if (poblacion[i,23] == LimiteCuarentena) {
       poblacion[i,16] <- 0;
@@ -491,7 +491,7 @@ prueba <- function(poblacion, no_pruebas) {
     # La columna que contiene los ids es la primer columna.
     columna_ids <- poblacion[,1];
     # Iteramos sobre el número total de pruebas a realizar
-    for (i in 1..no_pruebas) {
+    for (i in 1:no_pruebas) {
         # Obtenemos un id aleatorio.
         id <- randint(total_individuos) + 1;
         # Obtenemos el registro de este individuo.
