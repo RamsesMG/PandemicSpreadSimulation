@@ -449,7 +449,9 @@ GraficaTrabajo<-function(Poblacion){ #ejemplo de grafico de hogar a trabajo
 
 ###################################################
 
-cuarentena <- function(poblacion, no_pruebas)
+
+
+cuarentena <- function(poblacion, no_pruebas){
     # Obtenemos los individuos con latencia o infectados obtenidos
     # aleatoriamente para ponerlos en cuarentena.
     filas <- prueba(poblacion, no_pruebas);
@@ -465,7 +467,7 @@ cuarentena <- function(poblacion, no_pruebas)
 
 avanzar_cuarentena <- function(poblacion) {
   # Iteramos sobre todos los individuos en busca de los que estan en cuarentena.
-  for (i in 1:dim(poblacion)[0]) {
+  for (i in 1:dim(poblacion)[1]) {
     # Si ha cumplido el limite de cuarentena, es sacado de cuarentena.
     if (poblacion[i,23] == LimiteCuarentena) {
       poblacion[i,16] <- 0;
@@ -484,16 +486,17 @@ prueba <- function(poblacion, no_pruebas) {
     # en la prueba.
     individuos_considerados <- c();
     # Lista para guardar los individuos que pondremos en cuarentena.
-    individuos_en_latencia <- c();
+    individuos_para_cuarentena <- c();
     # El total de individuos en la población es necesario como limite para la 
     # generación de número aleatorios.
-    total_individuos <- dim(poblacion)[0];
+    total_individuos <- dim(poblacion)[1];
+    print(total_individuos);
     # La columna que contiene los ids es la primer columna.
     columna_ids <- poblacion[,1];
     # Iteramos sobre el número total de pruebas a realizar
     for (i in 1:no_pruebas) {
         # Obtenemos un id aleatorio.
-        id <- randint(total_individuos) + 1;
+        id <- sample(1:total_individuos, 1);
         # Obtenemos el registro de este individuo.
         fila <- match(c(id), columna_ids);
         if (is.element(id, individuos_considerados) || poblacion[fila,16] == 1) {
@@ -504,9 +507,9 @@ prueba <- function(poblacion, no_pruebas) {
             no_pruebas = no_pruebas + 1;
             # Continuamos a la siguiente iteración.
             next;
-        }  else if (poblacion[fila,4] == 4 || poblacion[fila,4] == 1]){
+        }  else if (poblacion[fila,4] == 4 || poblacion[fila,4] == 1){
             # Si este individuo esta latente o infectado lo consideramos para cuarentena
-            individuos_en_latencia <- c(individuos_en_latencia, fila);
+            individuos_para_cuarentena <- c(individuos_para_cuarentena, fila);
         } else {
           # Si no está latente o infectado aumentamos el número total de pruebas
           # para que no se vean afectadas.
@@ -514,8 +517,10 @@ prueba <- function(poblacion, no_pruebas) {
         }
         individuos_considerados <- c(individuos_considerados, id);
     }
-    return(individuos_en_latencia);
+    return(individuos_para_cuarentena);
 }
+
+
 # Autores:
 # Victor Francisco Carrizales Castor
 # Natalia ALejandra Garcia Armijo
